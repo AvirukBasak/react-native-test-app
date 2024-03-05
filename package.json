@@ -10,8 +10,17 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^3.2.0",
+    "@react-navigation/native": "^6.1.14",
+    "@react-navigation/stack": "^6.3.25",
+    "@types/react-native-video": "^5.0.19",
     "react": "18.2.0",
-    "react-native": "0.73.5"
+    "react-native": "0.73.5",
+    "react-native-camera": "^4.2.1",
+    "react-native-image-picker": "^7.1.0",
+    "react-native-linking": "^0.0.0",
+    "react-native-permissions": "^4.1.4",
+    "react-native-video": "^5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
