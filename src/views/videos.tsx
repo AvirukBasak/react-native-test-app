@@ -1,67 +1,63 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import React, {useState, useRef} from 'react';
-import {View, Text, Button} from 'react-native';
-import {RNCamera} from 'react-native-camera';
+import React, {useState} from 'react';
+import {View, Button, Platform, Linking} from 'react-native';
+import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import Video from 'react-native-video';
 
 export default function VideoScreen() {
-  const [isRecording, setIsRecording] = useState(false);
-  const cameraRef = useRef(null);
-  const [videoUri, setVideoUri] = useState('');
+  const [mediaUris, setMediaUris] = useState([] as string[]);
 
-  const startRecording = async () => {
-    if (cameraRef.current) {
-      try {
-        const {uri} = await (cameraRef.current as any).recordAsync();
-        setVideoUri(uri);
-        setIsRecording(true);
-      } catch (error) {
-        console.error('Failed to start recording:', error);
+  const selectImageFromGallery = () => {
+    launchImageLibrary({mediaType: 'video'}, response => {
+      if (!response.didCancel) {
+        setMediaUris(
+          response.assets?.map(asset => asset.uri || '').filter(k => k) || [],
+        );
       }
-    }
+    });
   };
 
-  const stopRecording = async () => {
-    if (cameraRef.current) {
-      try {
-        await (cameraRef.current as any).stopRecording();
-        setIsRecording(false);
-      } catch (error) {
-        console.error('Failed to stop recording:', error);
+  const takePicture = () => {
+    launchCamera({mediaType: 'video'}, response => {
+      if (!response.didCancel) {
+        setMediaUris(
+          response.assets?.map(asset => asset.uri || '').filter(k => k) || [],
+        );
       }
+    });
+  };
+
+  const openGalleryApp = () => {
+    if (Platform.OS === 'android') {
+      Linking.openURL('content://media/internal/images/media');
+    } else {
+      Linking.openURL('photos-redirect://');
     }
   };
 
   return (
-    <View style={{flex: 1}}>
-      <RNCamera
-        ref={cameraRef}
-        style={{flex: 1}}
-        type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.off}
-        captureAudio={true}
-      />
-
-      <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
-        {isRecording ? (
-          <Button title="Stop Recording" onPress={stopRecording} />
-        ) : (
-          <Button title="Start Recording" onPress={startRecording} />
-        )}
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+      }}>
+      {mediaUris.map((uri, i) => (
+        <Video
+          key={i}
+          source={{uri}}
+          style={{width: '90%', height: 400}}
+          controls={true}
+          resizeMode="contain"
+        />
+      ))}
+      <View style={{flexDirection: 'column', gap: 10}}>
+        <Button title="Take Video" onPress={takePicture} />
+        <Button title="Select from Gallery" onPress={selectImageFromGallery} />
+        <Button title="Open Gallery" onPress={openGalleryApp} />
       </View>
-
-      {videoUri ? (
-        <View style={{flex: 0, alignItems: 'center'}}>
-          <Text style={{marginTop: 20}}>Recorded Video:</Text>
-          <Video
-            source={{uri: videoUri}}
-            style={{width: 300, height: 300, marginTop: 10}}
-            controls={true}
-            resizeMode="contain"
-          />
-        </View>
-      ) : null}
     </View>
   );
 }

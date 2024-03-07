@@ -1,7 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
+
 import React, {useState} from 'react';
-import {View, Button, Image, Platform} from 'react-native';
+import {View, Button, Image, Platform, Linking} from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
-import {Linking} from 'react-native';
 
 const PictureScreen = () => {
   const [imageUris, setImageUris] = useState([] as string[]);
@@ -35,17 +36,21 @@ const PictureScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+      }}>
       {imageUris.map((uri, i) => (
-        <Image
-          key={i}
-          source={{uri}}
-          style={{width: 200, height: 200, margin: 5}}
-        />
+        <Image key={i} source={{uri}} style={{width: 200, height: 200}} />
       ))}
-      <Button title="Take Picture" onPress={takePicture} />
-      <Button title="Select from Gallery" onPress={selectImageFromGallery} />
-      <Button title="Open Gallery" onPress={openGalleryApp} />
+      <View style={{flexDirection: 'column', gap: 10}}>
+        <Button title="Select Image" onPress={selectImageFromGallery} />
+        <Button title="Take Picture" onPress={takePicture} />
+        <Button title="Open Gallery" onPress={openGalleryApp} />
+      </View>
     </View>
   );
 };

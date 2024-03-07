@@ -9,8 +9,8 @@ const GeolocationScreen = () => {
   useEffect(() => {
     const requestLocationPermission = async () => {
       try {
-        const granted = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-        if (granted === 'granted') {
+        const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+        if (status === 'granted') {
           Geolocation.getCurrentPosition(
             (position: {coords: {latitude: any; longitude: any}}) => {
               if (!position.coords) {
@@ -23,7 +23,7 @@ const GeolocationScreen = () => {
             {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
           );
         } else {
-          console.error('Permission denied');
+          console.error('Permission denied', status);
         }
       } catch (err) {
         console.warn(err);
