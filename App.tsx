@@ -1,3 +1,5 @@
+/* eslint-disable react-native/no-inline-styles */
+
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -13,7 +15,13 @@ const Home = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 10,
+      }}>
       <Text>Home</Text>
       <Button
         title="Take Picture"
