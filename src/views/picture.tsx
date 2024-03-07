@@ -24,7 +24,11 @@ const PictureScreen = () => {
           response.assets?.map(asset => asset.uri || '').filter(k => k) || [],
         );
       }
-    });
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.error(err));
   };
 
   const openGalleryApp = () => {
