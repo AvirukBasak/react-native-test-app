@@ -70,15 +70,12 @@ const GeolocationScreen = () => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       {location ? (
-        (console.log(location),
-        (
-          <Image
-            source={{
-              uri: getMapImage(location),
-            }}
-            style={{width: 400, height: 400}}
-          />
-        ))
+        <Image
+          source={{
+            uri: getMapImage(location),
+          }}
+          style={{width: 400, height: 400}}
+        />
       ) : (
         <Text style={{color: 'black'}}>Loading...</Text>
       )}
