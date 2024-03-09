@@ -65,7 +65,7 @@ export default function GeolocationScreen() {
       }
     }
 
-    async function getLocationOnNotAndroid() {
+    async function getLocationOnIOS() {
       Geolocation.requestAuthorization('whenInUse', (status: any) => {
         if (status === 'granted') {
           getLocationFromModule()
@@ -81,8 +81,8 @@ export default function GeolocationScreen() {
 
     if (Platform.OS === 'android') {
       getLocationOnAndroid();
-    } else {
-      getLocationOnNotAndroid();
+    } else if (Platform.OS === 'ios') {
+      getLocationOnIOS();
     }
   }, []);
 
