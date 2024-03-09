@@ -58,8 +58,8 @@ export default function VideoScreen() {
         />
       ))}
       <View style={{flexDirection: 'column', gap: 10}}>
-        <Button title="Take Video" onPress={takePicture} />
-        <Button title="Select from Gallery" onPress={selectImageFromGallery} />
+        <Button title="Record Video" onPress={takePicture} />
+        <Button title="Select Video" onPress={selectImageFromGallery} />
         <Button title="Open Gallery" onPress={openGalleryApp} />
       </View>
     </View>

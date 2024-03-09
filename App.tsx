@@ -8,6 +8,7 @@ import PictureScreen from './src/views/picture';
 import VideoScreen from './src/views/videos';
 import GeolocationScreen from './src/views/geoloc';
 import {View, Text, Button} from 'react-native';
+import ContactList from './src/views/allContacts';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,10 @@ const Home = () => {
       }}>
       <Text>Home</Text>
       <Button
+        title="Geolocation"
+        onPress={() => navigation.navigate('Geolocation' as never)}
+      />
+      <Button
         title="Take Picture"
         onPress={() => navigation.navigate('Picture' as never)}
       />
@@ -32,8 +37,8 @@ const Home = () => {
         onPress={() => navigation.navigate('Video' as never)}
       />
       <Button
-        title="Geolocation"
-        onPress={() => navigation.navigate('Geolocation' as never)}
+        title="All Contacts"
+        onPress={() => navigation.navigate('Contacts' as never)}
       />
     </View>
   );
@@ -45,6 +50,11 @@ const App = () => {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen
+          name="Geolocation"
+          component={GeolocationScreen}
+          options={{title: 'Geolocation'}}
+        />
+        <Stack.Screen
           name="Picture"
           component={PictureScreen}
           options={{title: 'Take Picture'}}
@@ -55,9 +65,9 @@ const App = () => {
           options={{title: 'Record Video'}}
         />
         <Stack.Screen
-          name="Geolocation"
-          component={GeolocationScreen}
-          options={{title: 'Geolocation'}}
+          name="Contacts"
+          component={ContactList}
+          options={{title: 'All Contacts'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

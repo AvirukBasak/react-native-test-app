@@ -65,13 +65,19 @@ export default function ContactList() {
       );
     }
 
+    function comparator(a: Contacts.Contact, b: Contacts.Contact) {
+      const nameA = `${a.givenName} ${a.middleName} ${a.familyName}`;
+      const nameB = `${b.givenName} ${b.middleName} ${b.familyName}`;
+      return nameA.localeCompare(nameB);
+    }
+
     if (Platform.OS === 'android') {
       loadContactsOnAndroid()
-        .then(c => setContacts(c))
+        .then(c => setContacts(c.sort(comparator)))
         .catch(console.error);
     } else if (Platform.OS === 'ios') {
       loadContactsOnIOS()
-        .then(c => setContacts(c))
+        .then(c => setContacts(c.sort(comparator)))
         .catch(console.error);
     }
   }, []);
@@ -79,10 +85,12 @@ export default function ContactList() {
   function renderContact({item}: {item: Contacts.Contact}) {
     return (
       <View style={styles.contactContainer}>
-        <Image
-          source={{uri: item.thumbnailPath}}
-          style={{width: 50, height: 50}}
-        />
+        {item.thumbnailPath && (
+          <Image
+            source={{uri: item.thumbnailPath}}
+            style={{width: 100, height: 100}}
+          />
+        )}
         <Text style={styles.name}>
           {item.givenName} {item.middleName} {item.familyName}
         </Text>
@@ -109,15 +117,15 @@ export default function ContactList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
     padding: 16,
   },
   contactContainer: {
-    marginVertical: 8,
+    marginVertical: 10,
   },
   name: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: 'black',
   },
   phone: {
     fontSize: 16,

@@ -51,8 +51,8 @@ const PictureScreen = () => {
         <Image key={i} source={{uri}} style={{width: 200, height: 200}} />
       ))}
       <View style={{flexDirection: 'column', gap: 10}}>
-        <Button title="Select Image" onPress={selectImageFromGallery} />
         <Button title="Take Picture" onPress={takePicture} />
+        <Button title="Select Image" onPress={selectImageFromGallery} />
         <Button title="Open Gallery" onPress={openGalleryApp} />
       </View>
     </View>
