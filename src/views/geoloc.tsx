@@ -1,9 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React, {useEffect, useState} from 'react';
-import {View, Text, Image, Platform} from 'react-native';
+import {View, Text, Image, Platform, PermissionsAndroid} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import {request, PERMISSIONS} from 'react-native-permissions';
 
 function getMapImage({
   latitude,
@@ -13,57 +12,77 @@ function getMapImage({
   longitude: number;
 }) {
   console.log('getMapImage', latitude, longitude);
-  const API_KEY = '1156ef3690f2407c95a80c4169e51445';
-  return `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=400&height=400&center=lonlat:${longitude},${latitude}&marker=lonlat:${longitude},${latitude}&zoom=14&apiKey=${API_KEY}`;
+  const api_key = '1156ef3690f2407c95a80c4169e51445';
+  return `https://maps.geoapify.com/v1/staticmap?style=osm-carto&width=400&height=400&center=lonlat:${longitude},${latitude}&marker=lonlat:${longitude},${latitude}&zoom=14&apiKey=${api_key}`;
 }
 
-const GeolocationScreen = () => {
+export default function GeolocationScreen() {
   const [location, setLocation] = useState({latitude: 0, longitude: 0});
 
   useEffect(() => {
-    const requestLocationPermission = async () => {
+    async function getLocationFromModule(): Promise<{
+      latitude: number;
+      longitude: number;
+    }> {
+      return new Promise((resolve, reject) =>
+        Geolocation.getCurrentPosition(
+          (position: {coords: {latitude: any; longitude: any}}) => {
+            if (!position.coords) {
+              reject('No position data');
+            }
+            const {latitude, longitude} = position.coords;
+            resolve({latitude, longitude});
+          },
+          (error: {message: any}) => console.error(error.message),
+          {enableHighAccuracy: true},
+        ),
+      );
+    }
+
+    async function getLocationOnAndroid() {
       try {
-        const status = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-        if (status === 'granted') {
-          Geolocation.getCurrentPosition(
-            (position: {coords: {latitude: any; longitude: any}}) => {
-              if (!position.coords) {
-                return;
-              }
-              const {latitude, longitude} = position.coords;
+        const stat = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location',
+            message: 'This app would like to view your location.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (stat === PermissionsAndroid.RESULTS.GRANTED) {
+          getLocationFromModule()
+            .then(({latitude, longitude}) => {
               setLocation({latitude, longitude});
-            },
-            (error: {message: any}) => console.error(error.message),
-            {enableHighAccuracy: true},
-          );
+            })
+            .catch(err => console.error(err));
         } else {
-          console.error('Permission denied', status);
+          console.error('Location permission', stat);
         }
       } catch (err) {
         console.warn(err);
       }
-    };
+    }
 
-    if (Platform.OS === 'android') {
-      requestLocationPermission();
-    } else {
+    async function getLocationOnNotAndroid() {
       Geolocation.requestAuthorization('whenInUse', (status: any) => {
         if (status === 'granted') {
-          Geolocation.getCurrentPosition(
-            (position: {coords: {latitude: any; longitude: any}}) => {
-              if (!position.coords) {
-                return;
-              }
-              const {latitude, longitude} = position.coords;
+          getLocationFromModule()
+            .then(({latitude, longitude}) => {
               setLocation({latitude, longitude});
-            },
-            (error: {message: any}) => console.error(error.message),
-            {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-          );
+            })
+            .catch(err => console.error(err));
         } else {
-          console.error('Permission denied');
+          console.error('Location permission', status);
         }
       });
+    }
+
+    if (Platform.OS === 'android') {
+      getLocationOnAndroid();
+    } else {
+      getLocationOnNotAndroid();
     }
   }, []);
 
@@ -81,6 +100,4 @@ const GeolocationScreen = () => {
       )}
     </View>
   );
-};
-
-export default GeolocationScreen;
+}
