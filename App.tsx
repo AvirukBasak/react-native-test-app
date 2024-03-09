@@ -9,6 +9,7 @@ import VideoScreen from './src/views/videos';
 import GeolocationScreen from './src/views/geoloc';
 import {View, Text, Button} from 'react-native';
 import ContactList from './src/views/allContacts';
+import InstalledPhoneNumber from './src/views/allSimNumbers';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,10 @@ const Home = () => {
         onPress={() => navigation.navigate('Video' as never)}
       />
       <Button
+        title="Phone Number"
+        onPress={() => navigation.navigate('PhoneNumber' as never)}
+      />
+      <Button
         title="All Contacts"
         onPress={() => navigation.navigate('Contacts' as never)}
       />
@@ -63,6 +68,11 @@ const App = () => {
           name="Video"
           component={VideoScreen}
           options={{title: 'Record Video'}}
+        />
+        <Stack.Screen
+          name="PhoneNumber"
+          component={InstalledPhoneNumber}
+          options={{title: 'Phone Number'}}
         />
         <Stack.Screen
           name="Contacts"
