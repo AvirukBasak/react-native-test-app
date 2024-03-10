@@ -12,6 +12,7 @@ import {
 export default function AutoOTP() {
   const [hashFromMethod, setHashFromMethod] = React.useState<string[]>();
   const [otpFromMethod, setOtpFromMethod] = React.useState<string>();
+
   const [hint, setHint] = React.useState<string>();
 
   // using hook - you can use the startListener and stopListener to manually trigger listeners again.
@@ -27,6 +28,7 @@ export default function AutoOTP() {
         console.log(h);
       })
       .catch(console.log);
+    // mobile number selection hint
     requestHint().then(setHint).catch(console.log);
     startOtpListener(setOtpFromMethod);
   }, []);
