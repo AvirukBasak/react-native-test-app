@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {StyleSheet, Text, View} from 'react-native';
+import {TextInput} from 'react-native-gesture-handler';
 import {
   getHash,
   requestHint,
@@ -32,6 +33,24 @@ export default function AutoOTP() {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.inp}
+        placeholder="Enter OTP"
+        placeholderTextColor={'gray'}
+        keyboardType="numeric"
+        textContentType="oneTimeCode"
+        autoComplete="sms-otp"
+        value={otp ? otp : !isNaN(Number(otpFromMethod)) ? otpFromMethod : ''}
+        onChangeText={text => {
+          if (text.length > 6) {
+            text = text.slice(0, 6);
+          }
+          if (text.length === 6) {
+            console.log('OTP =', text);
+          }
+          setOtpFromMethod(text);
+        }}
+      />
       <View style={styles.resultView}>
         <Text style={styles.resultHeader}>Using Methods</Text>
         <Text style={styles.txt}>Your Hash is: {hashFromMethod}</Text>
@@ -72,5 +91,16 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: 'black',
+  },
+  inp: {
+    width: '80%',
+    borderWidth: 1,
+    color: 'black',
+    backgroundColor: 'white',
+    borderColor: '#aaa',
+    padding: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginVertical: 20,
   },
 });
