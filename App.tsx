@@ -10,6 +10,7 @@ import GeolocationScreen from './src/views/geoloc';
 import {View, Text, Button} from 'react-native';
 import ContactList from './src/views/allContacts';
 import InstalledPhoneNumber from './src/views/allSimNumbers';
+import AutoOTP from './src/views/autoOTP';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,10 @@ const Home = () => {
         title="All Contacts"
         onPress={() => navigation.navigate('Contacts' as never)}
       />
+      <Button
+        title="Auto OTP"
+        onPress={() => navigation.navigate('AutoOTP' as never)}
+      />
     </View>
   );
 };
@@ -78,6 +83,11 @@ const App = () => {
           name="Contacts"
           component={ContactList}
           options={{title: 'All Contacts'}}
+        />
+        <Stack.Screen
+          name="AutoOTP"
+          component={AutoOTP}
+          options={{title: 'Auto OTP'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
