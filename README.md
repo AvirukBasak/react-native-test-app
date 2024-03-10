@@ -1,5 +1,7 @@
 ## List of tests runs
 
+[Download for Android](https://github.com/AvirukBasak/react-native-test-app/releases/download/0.1/app-release.apk)
+
 ### Camera
 Since native camera app is used to record videos or capture images, the app doesn't require camera permissions
 
