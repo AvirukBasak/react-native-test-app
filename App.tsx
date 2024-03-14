@@ -11,6 +11,7 @@ import {View, Text, Button} from 'react-native';
 import ContactList from './src/views/allContacts';
 import InstalledPhoneNumber from './src/views/allSimNumbers';
 import AutoOTP from './src/views/autoOTP';
+import DigitalAvatar from './src/views/digitalAvatar';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,10 @@ const Home = () => {
         title="Auto OTP"
         onPress={() => navigation.navigate('AutoOTP' as never)}
       />
+      <Button
+        title="Digital Avatar"
+        onPress={() => navigation.navigate('DigitalAvatar' as never)}
+      />
     </View>
   );
 };
@@ -88,6 +93,11 @@ const App = () => {
           name="AutoOTP"
           component={AutoOTP}
           options={{title: 'Auto OTP'}}
+        />
+        <Stack.Screen
+          name="DigitalAvatar"
+          component={DigitalAvatar}
+          options={{title: 'Digital Avatar'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
