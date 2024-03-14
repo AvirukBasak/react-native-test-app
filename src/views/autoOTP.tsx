@@ -27,9 +27,9 @@ export default function AutoOTP() {
         setHashFromMethod(h);
         console.log(h);
       })
-      .catch(console.log);
+      .catch(console.error);
     // mobile number selection hint
-    requestHint().then(setHint).catch(console.log);
+    requestHint().then(setHint).catch(console.error);
     startOtpListener(setOtpFromMethod);
   }, []);
 
