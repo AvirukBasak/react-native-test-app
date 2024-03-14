@@ -8,6 +8,7 @@ import {
   startOtpListener,
   useOtpVerify,
 } from 'react-native-otp-verify';
+import DeviceInfo from 'react-native-device-info';
 
 export default function AutoOTP() {
   const [hashFromMethod, setHashFromMethod] = React.useState<string[]>();
@@ -28,6 +29,8 @@ export default function AutoOTP() {
         console.log(h);
       })
       .catch(console.error);
+    // use default mobile number
+    setHint(DeviceInfo.getPhoneNumberSync());
     // mobile number selection hint
     requestHint().then(setHint).catch(console.error);
     startOtpListener(setOtpFromMethod);
