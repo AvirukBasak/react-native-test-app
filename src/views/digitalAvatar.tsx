@@ -86,7 +86,9 @@ function TalkingAvatar({
 }
 
 export default function DigitalAvatar() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(
+    'This method creates a new array containing all of the elements of the original array that pass a test function. You can use this method to create a new array containing only the elements of the original array that are equal to a random number.',
+  );
   const [isSpeaking, setIsStarted] = useState(false);
 
   return (
