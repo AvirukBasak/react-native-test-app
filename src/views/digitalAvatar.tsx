@@ -2,9 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {View, Image, Text, TextInput, StyleSheet, Button} from 'react-native';
 import Tts, {TtsEvent} from 'react-native-tts';
 
-/**
- *
- */
 const AvatarImages = [
   require('../res/avatar/0.png'),
   require('../res/avatar/1.png'),
@@ -97,5 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 10,
   },
 });
