@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image, Text, TextInput, StyleSheet, Button} from 'react-native';
+import {View, Image, TextInput, StyleSheet, Button} from 'react-native';
 import Tts, {TtsEvent} from 'react-native-tts';
 
 const AvatarImages = [
@@ -9,68 +9,94 @@ const AvatarImages = [
   require('../res/avatar/3.png'),
 ];
 
-function TalkingAvatar({text}: {text: string}) {
+function TalkingAvatar({
+  text,
+  isSpeaking,
+  setIsSpeaking,
+}: {
+  text: string;
+  isSpeaking: boolean;
+  setIsSpeaking: (speaking: boolean) => void;
+}) {
   const [currentFrame, setCurrentFrame] = useState(0);
-  const [speaking, setSpeaking] = useState(false);
 
   useEffect(() => {
-    if (!text || speaking) {
+    if (!isSpeaking || !text) {
+      // if not speaking or no text, return
       return;
     }
 
-    setSpeaking(true);
+    Tts.getInitStatus()
+      .then(() =>
+        Tts.speak(text, {
+          androidParams: {
+            KEY_PARAM_PAN: -1,
+            KEY_PARAM_VOLUME: 0.5,
+            KEY_PARAM_STREAM: 'STREAM_MUSIC',
+          },
+          iosVoiceId: 'com.apple.ttsbundle.Samantha-compact',
+          rate: 0.5,
+        }),
+      )
+      .catch(console.error);
+  }, [text, isSpeaking, setIsSpeaking]);
 
-    Tts.speak(text, {
-      androidParams: {
-        KEY_PARAM_PAN: -1,
-        KEY_PARAM_VOLUME: 0.5,
-        KEY_PARAM_STREAM: 'STREAM_MUSIC',
+  useEffect(() => {
+    const listeners = {
+      addListeners: () => {
+        Tts.addEventListener('tts-finish', ttsEvents.onDone);
+        Tts.addEventListener('tts-cancel', ttsEvents.onStopped);
+        Tts.addEventListener('tts-progress', ttsEvents.onProgress);
       },
-      iosVoiceId: 'com.apple.ttsbundle.Moira-compact',
-      rate: 0.5,
-    });
+      removeListeners: () => {
+        Tts.removeEventListener('tts-start', ttsEvents.onStart);
+        Tts.removeEventListener('tts-finish', ttsEvents.onDone);
+        Tts.removeEventListener('tts-cancel', ttsEvents.onStopped);
+        Tts.removeEventListener('tts-progress', ttsEvents.onProgress);
+      },
+    };
 
     const ttsEvents = {
       onStart: () => {
         setCurrentFrame(1);
+        listeners.addListeners();
       },
       onDone: () => {
-        setSpeaking(false);
+        setIsSpeaking(false);
         setCurrentFrame(0);
       },
       onStopped: () => {
-        setSpeaking(false);
+        setIsSpeaking(false);
         setCurrentFrame(0);
       },
-      onProgress: (progress: TtsEvent<'tts-progress'>) => {
-        const syllableIndex = Math.floor(progress.location / 0.2);
-        const frameIndex = (syllableIndex % 3) + 1;
+      onProgress: (_progress: TtsEvent<'tts-progress'>) => {
+        let frameIndex = currentFrame;
+        while (frameIndex === currentFrame) {
+          const frames = [1, 2, 3];
+          frameIndex = frames[Math.floor(Math.random() * frames.length)];
+        }
         setCurrentFrame(frameIndex);
       },
     };
 
     Tts.addEventListener('tts-start', ttsEvents.onStart);
-    Tts.addEventListener('tts-finish', ttsEvents.onDone);
-    Tts.addEventListener('tts-cancel', ttsEvents.onStopped);
-    Tts.addEventListener('tts-progress', ttsEvents.onProgress);
-  }, [speaking, text]);
+  }, [text, isSpeaking, setIsSpeaking, currentFrame]);
 
-  return (
-    <View>
-      <Image source={AvatarImages[currentFrame]} />
-      {text && <Text>{text}</Text>}
-    </View>
-  );
+  return <Image source={AvatarImages[currentFrame % 4]} />;
 }
 
 export default function DigitalAvatar() {
   const [text, setText] = useState('');
-  const [started, setStarted] = useState(false);
+  const [isSpeaking, setIsStarted] = useState(false);
 
   return (
     <View style={styles.container}>
-      {started ? (
-        <TalkingAvatar text={text} />
+      {isSpeaking ? (
+        <TalkingAvatar
+          text={text}
+          isSpeaking={isSpeaking}
+          setIsSpeaking={setIsStarted}
+        />
       ) : (
         <Image source={AvatarImages[0]} />
       )}
@@ -82,8 +108,8 @@ export default function DigitalAvatar() {
       />
 
       <Button
-        title={started ? 'Stop' : 'Start'}
-        onPress={() => setStarted(!started)}
+        title={isSpeaking ? 'Stop' : 'Start'}
+        onPress={() => setIsStarted(!isSpeaking)}
       />
     </View>
   );
