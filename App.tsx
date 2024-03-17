@@ -11,7 +11,7 @@ import {View, Text, Button} from 'react-native';
 import ContactList from './src/views/allContacts';
 import InstalledPhoneNumber from './src/views/allSimNumbers';
 import AutoOTP from './src/views/autoOTP';
-import DigitalAvatar from './src/views/digitalAvatar';
+import ChatBox from './src/views/chatBox';
 
 const Stack = createStackNavigator();
 
@@ -96,7 +96,7 @@ const App = () => {
         />
         <Stack.Screen
           name="DigitalAvatar"
-          component={DigitalAvatar}
+          component={ChatBox}
           options={{title: 'Digital Avatar'}}
         />
       </Stack.Navigator>

@@ -140,7 +140,7 @@ const chatviewStyles = StyleSheet.create({
   },
 });
 
-export default function DigitalAvatar() {
+export default function ChatBox() {
   const [chatVisible, setChatVisible] = useState(false);
 
   return (
