@@ -12,6 +12,7 @@ import ContactList from './src/views/allContacts';
 import InstalledPhoneNumber from './src/views/allSimNumbers';
 import AutoOTP from './src/views/autoOTP';
 import ChatBox from './src/views/chatBox';
+import DigitalAvatar from './src/views/digitalAvatar';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,10 @@ const Home = () => {
       <Button
         title="Auto OTP"
         onPress={() => navigation.navigate('AutoOTP' as never)}
+      />
+      <Button
+        title="Chat Box"
+        onPress={() => navigation.navigate('ChatBox' as never)}
       />
       <Button
         title="Digital Avatar"
@@ -95,8 +100,13 @@ const App = () => {
           options={{title: 'Auto OTP'}}
         />
         <Stack.Screen
-          name="DigitalAvatar"
+          name="ChatBox"
           component={ChatBox}
+          options={{title: 'Chat Box'}}
+        />
+        <Stack.Screen
+          name="DigitalAvatar"
+          component={DigitalAvatar}
           options={{title: 'Digital Avatar'}}
         />
       </Stack.Navigator>
