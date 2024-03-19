@@ -4,13 +4,17 @@ import messaging from '@react-native-firebase/messaging';
 import Tts from 'react-native-tts';
 
 function ttsSpeak(title?: string, body?: string) {
+  if (!title || !body) {
+    return;
+  }
   const text = `${title}, ${body}`;
+  Tts.setDucking(true);
   Tts.getInitStatus()
     .then(() =>
       Tts.speak(text, {
         androidParams: {
           KEY_PARAM_PAN: -1,
-          KEY_PARAM_VOLUME: 1,
+          KEY_PARAM_VOLUME: 5,
           KEY_PARAM_STREAM: 'STREAM_NOTIFICATION',
         },
         iosVoiceId: 'com.apple.ttsbundle.Samantha-compact',
@@ -30,39 +34,39 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   ttsSpeak(title, body);
 });
 
-messaging()
-  .getInitialNotification()
-  .then(remoteMessage => {
-    if (remoteMessage) {
-      // Get the notification data
-      const {notification} = remoteMessage;
-      const {title, body} = notification || {title: '', body: ''};
+// messaging()
+//   .getInitialNotification()
+//   .then(remoteMessage => {
+//     if (remoteMessage) {
+//       // Get the notification data
+//       const {notification} = remoteMessage;
+//       const {title, body} = notification || {title: '', body: ''};
 
-      // Play the notification content using TTS
-      console.log('GetInitialNotification', title);
-      ttsSpeak(title, body);
-    }
-  });
+//       // Play the notification content using TTS
+//       console.log('GetInitialNotification', title);
+//       ttsSpeak(title, body);
+//     }
+//   });
 
-messaging().onNotificationOpenedApp(remoteMessage => {
-  // Get the notification data
-  const {notification} = remoteMessage;
-  const {title, body} = notification || {title: '', body: ''};
-
-  // Play the notification content using TTS
-  console.log('OnNotificationOpenedApp', title);
-  ttsSpeak(title, body);
-});
-
-// messaging().onMessage(async remoteMessage => {
+// messaging().onNotificationOpenedApp(remoteMessage => {
 //   // Get the notification data
 //   const {notification} = remoteMessage;
 //   const {title, body} = notification || {title: '', body: ''};
 
 //   // Play the notification content using TTS
-//   console.log('OnMessage', title);
+//   console.log('OnNotificationOpenedApp', title);
 //   ttsSpeak(title, body);
 // });
+
+messaging().onMessage(async remoteMessage => {
+  // Get the notification data
+  const {notification} = remoteMessage;
+  const {title, body} = notification || {title: '', body: ''};
+
+  // Play the notification content using TTS
+  console.log('OnMessage', title);
+  ttsSpeak(title, body);
+});
 
 export default function FcmNotify() {
   async function requestPermissionsAndroid() {
