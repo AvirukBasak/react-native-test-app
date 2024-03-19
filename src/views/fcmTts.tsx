@@ -10,7 +10,7 @@ function ttsSpeak(title?: string, body?: string) {
       Tts.speak(text, {
         androidParams: {
           KEY_PARAM_PAN: -1,
-          KEY_PARAM_VOLUME: 0.5,
+          KEY_PARAM_VOLUME: 1,
           KEY_PARAM_STREAM: 'STREAM_NOTIFICATION',
         },
         iosVoiceId: 'com.apple.ttsbundle.Samantha-compact',
@@ -21,8 +21,6 @@ function ttsSpeak(title?: string, body?: string) {
 }
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Background Message received!', remoteMessage);
-
   // Get the notification data
   const {notification} = remoteMessage;
   const {title, body} = notification || {title: '', body: ''};
@@ -36,11 +34,6 @@ messaging()
   .getInitialNotification()
   .then(remoteMessage => {
     if (remoteMessage) {
-      console.log(
-        'Notification caused app to open from quit state',
-        remoteMessage,
-      );
-
       // Get the notification data
       const {notification} = remoteMessage;
       const {title, body} = notification || {title: '', body: ''};
@@ -52,8 +45,6 @@ messaging()
   });
 
 messaging().onNotificationOpenedApp(remoteMessage => {
-  console.log('Notification caused app to open from background', remoteMessage);
-
   // Get the notification data
   const {notification} = remoteMessage;
   const {title, body} = notification || {title: '', body: ''};
@@ -64,8 +55,6 @@ messaging().onNotificationOpenedApp(remoteMessage => {
 });
 
 // messaging().onMessage(async remoteMessage => {
-//   console.log('Foreground Message received!', remoteMessage);
-
 //   // Get the notification data
 //   const {notification} = remoteMessage;
 //   const {title, body} = notification || {title: '', body: ''};
