@@ -28,6 +28,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   const {title, body} = notification || {title: '', body: ''};
 
   // Play the notification content using TTS
+  console.log('BackgroundMessageHandler', title);
   ttsSpeak(title, body);
 });
 
@@ -45,9 +46,34 @@ messaging()
       const {title, body} = notification || {title: '', body: ''};
 
       // Play the notification content using TTS
+      console.log('GetInitialNotification', title);
       ttsSpeak(title, body);
     }
   });
+
+messaging().onNotificationOpenedApp(remoteMessage => {
+  console.log('Notification caused app to open from background', remoteMessage);
+
+  // Get the notification data
+  const {notification} = remoteMessage;
+  const {title, body} = notification || {title: '', body: ''};
+
+  // Play the notification content using TTS
+  console.log('OnNotificationOpenedApp', title);
+  ttsSpeak(title, body);
+});
+
+// messaging().onMessage(async remoteMessage => {
+//   console.log('Foreground Message received!', remoteMessage);
+
+//   // Get the notification data
+//   const {notification} = remoteMessage;
+//   const {title, body} = notification || {title: '', body: ''};
+
+//   // Play the notification content using TTS
+//   console.log('OnMessage', title);
+//   ttsSpeak(title, body);
+// });
 
 export default function FcmNotify() {
   async function requestPermissionsAndroid() {
@@ -80,32 +106,12 @@ export default function FcmNotify() {
     return false;
   }
 
-  function registerForegroundHandler() {
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      console.log(
-        'Notification caused app to open from background',
-        remoteMessage,
-      );
-
-      // Get the notification data
-      const {notification} = remoteMessage;
-      const {title, body} = notification || {title: '', body: ''};
-
-      // Play the notification content using TTS
-      ttsSpeak(title, body);
-    });
-  }
-
   useEffect(() => {
     (async () => {
       if (Platform.OS === 'android' && Platform.Version >= 30) {
-        if (await requestPermissionsAndroid()) {
-          registerForegroundHandler();
-        }
-      } else {
-        if (await requestPermissionsIOS()) {
-          registerForegroundHandler();
-        }
+        await requestPermissionsAndroid();
+      } else if (Platform.OS === 'ios') {
+        await requestPermissionsIOS();
       }
     })();
   }, []);
