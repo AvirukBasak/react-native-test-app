@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React from 'react';
-import FcmNotify from './src/views/fcmTts';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
@@ -14,6 +13,7 @@ import InstalledPhoneNumber from './src/views/allSimNumbers';
 import AutoOTP from './src/views/autoOTP';
 import ChatBox from './src/views/chatBox';
 import DigitalAvatar from './src/views/digitalAvatar';
+import FcmNotify from './src/views/fcmTts';
 
 const Stack = createStackNavigator();
 
