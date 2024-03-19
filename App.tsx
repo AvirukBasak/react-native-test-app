@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React from 'react';
+import FcmNotify from './src/views/fcmTts';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
@@ -60,6 +61,7 @@ const Home = () => {
         title="Digital Avatar"
         onPress={() => navigation.navigate('DigitalAvatar' as never)}
       />
+      <FcmNotify />
     </View>
   );
 };
