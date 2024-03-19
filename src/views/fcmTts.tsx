@@ -98,7 +98,7 @@ export default function FcmNotify() {
 
   useEffect(() => {
     (async () => {
-      if (Platform.OS === 'android') {
+      if (Platform.OS === 'android' && Platform.Version >= 30) {
         if (await requestPermissionsAndroid()) {
           registerForegroundHandler();
         }

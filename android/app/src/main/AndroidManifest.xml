@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"
                      android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
       android:name=".MainApplication"
