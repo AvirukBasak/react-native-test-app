@@ -66,6 +66,9 @@ messaging().onMessage(async remoteMessage => {
   // Play the notification content using TTS
   console.log('OnMessage', title);
   ttsSpeak(title, body);
+  if (title && body) {
+    Alert.alert(title, body);
+  }
 });
 
 export default function FcmNotify() {
