@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {PermissionsAndroid, Platform} from 'react-native';
+import {Alert, Button, PermissionsAndroid, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import Tts from 'react-native-tts';
 
@@ -111,5 +111,18 @@ export default function FcmNotify() {
   }, []);
 
   // Render your app content
-  return <></>;
+  return (
+    <Button
+      title="FCM Token"
+      onPress={() => {
+        messaging()
+          .getToken()
+          .then(token => {
+            Alert.alert('FCM Token', token);
+            console.log('FCM Token:', token);
+          })
+          .catch(console.error);
+      }}
+    />
+  );
 }
