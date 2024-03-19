@@ -3,22 +3,20 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import Tts from 'react-native-tts';
 
-messaging().setBackgroundMessageHandler(
-  async (remoteMessage: {notification: any}) => {
-    console.log('Background Message received!', remoteMessage);
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Background Message received!', remoteMessage);
 
-    // Get the notification data
-    const {notification} = remoteMessage;
-    const {title, body} = notification;
+  // Get the notification data
+  const {notification} = remoteMessage;
+  const {title, body} = notification || {title: '', body: ''};
 
-    // Play the notification content using TTS
-    Tts.speak(`${title}, ${body}`);
-  },
-);
+  // Play the notification content using TTS
+  Tts.speak(`${title}, ${body}`);
+});
 
 messaging()
   .getInitialNotification()
-  .then((remoteMessage: {notification: any}) => {
+  .then(remoteMessage => {
     if (remoteMessage) {
       console.log(
         'Notification caused app to open from quit state',
@@ -27,7 +25,7 @@ messaging()
 
       // Get the notification data
       const {notification} = remoteMessage;
-      const {title, body} = notification;
+      const {title, body} = notification || {title: '', body: ''};
 
       // Play the notification content using TTS
       Tts.speak(`${title}, ${body}`);
@@ -66,21 +64,19 @@ export default function FcmNotify() {
   }
 
   function registerForegroundHandler() {
-    messaging().onNotificationOpenedApp(
-      (remoteMessage: {notification: any}) => {
-        console.log(
-          'Notification caused app to open from background',
-          remoteMessage,
-        );
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background',
+        remoteMessage,
+      );
 
-        // Get the notification data
-        const {notification} = remoteMessage;
-        const {title, body} = notification;
+      // Get the notification data
+      const {notification} = remoteMessage;
+      const {title, body} = notification || {title: '', body: ''};
 
-        // Play the notification content using TTS
-        Tts.speak(`${title}, ${body}`);
-      },
-    );
+      // Play the notification content using TTS
+      Tts.speak(`${title}, ${body}`);
+    });
   }
 
   useEffect(() => {
