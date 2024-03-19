@@ -3,6 +3,23 @@ import {PermissionsAndroid, Platform} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import Tts from 'react-native-tts';
 
+function ttsSpeak(title?: string, body?: string) {
+  const text = `${title}, ${body}`;
+  Tts.getInitStatus()
+    .then(() =>
+      Tts.speak(text, {
+        androidParams: {
+          KEY_PARAM_PAN: -1,
+          KEY_PARAM_VOLUME: 0.5,
+          KEY_PARAM_STREAM: 'STREAM_NOTIFICATION',
+        },
+        iosVoiceId: 'com.apple.ttsbundle.Samantha-compact',
+        rate: 0.5,
+      }),
+    )
+    .catch(console.error);
+}
+
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Background Message received!', remoteMessage);
 
@@ -11,7 +28,7 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   const {title, body} = notification || {title: '', body: ''};
 
   // Play the notification content using TTS
-  Tts.speak(`${title}, ${body}`);
+  ttsSpeak(title, body);
 });
 
 messaging()
@@ -28,7 +45,7 @@ messaging()
       const {title, body} = notification || {title: '', body: ''};
 
       // Play the notification content using TTS
-      Tts.speak(`${title}, ${body}`);
+      ttsSpeak(title, body);
     }
   });
 
@@ -75,7 +92,7 @@ export default function FcmNotify() {
       const {title, body} = notification || {title: '', body: ''};
 
       // Play the notification content using TTS
-      Tts.speak(`${title}, ${body}`);
+      ttsSpeak(title, body);
     });
   }
 
